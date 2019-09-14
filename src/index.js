@@ -1,7 +1,8 @@
 /**
  * Parameters
  */
-const webSocketsServerPort = 34263; // Adapt to the listening port number you want to use
+const webSocketsServerPort = process.env.PORT || 3333;
+// Adapt to the listening port number you want to use
 /**
  * Global variables
  */
