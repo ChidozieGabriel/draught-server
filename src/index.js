@@ -34,6 +34,58 @@ const wsServer = new WebSocketServer({
   httpServer: server,
 });
 
+// -----------------------------------------------------------
+// List of all players
+// -----------------------------------------------------------
+const Players = [];
+
+function Player(id, connection) {
+  this.id = id;
+  this.connection = connection;
+  this.name = '';
+  this.opponentIndex = null;
+  this.index = Players.length;
+}
+
+Player.prototype = {
+  getId() {
+    return { name: this.name, id: this.id };
+  },
+  setOpponent(id) {
+    const self = this;
+    Players.find((player, index) => {
+      if (player.id === id) {
+        self.opponentIndex = index;
+        Players[index].opponentIndex = self.index;
+        return true;
+      }
+
+      return false;
+    });
+  },
+};
+
+// ---------------------------------------------------------
+// Routine to broadcast the list of all players to everyone
+// ---------------------------------------------------------
+function BroadcastPlayersList() {
+  const playersList = [];
+  Players.forEach((player) => {
+    if (player.name !== '') {
+      playersList.push(player.getId());
+    }
+  });
+
+  const message = JSON.stringify({
+    action: 'players_list',
+    data: playersList,
+  });
+
+  Players.forEach((player) => {
+    player.connection.sendUTF(message);
+  });
+}
+
 // This callback function is called every time someone
 // tries to connect to the WebSocket server
 wsServer.on('request', (request) => {
@@ -122,55 +174,3 @@ wsServer.on('request', (request) => {
     // TODO
   });
 });
-
-// -----------------------------------------------------------
-// List of all players
-// -----------------------------------------------------------
-const Players = [];
-
-function Player(id, connection) {
-  this.id = id;
-  this.connection = connection;
-  this.name = '';
-  this.opponentIndex = null;
-  this.index = Players.length;
-}
-
-Player.prototype = {
-  getId() {
-    return { name: this.name, id: this.id };
-  },
-  setOpponent(id) {
-    const self = this;
-    Players.find((player, index) => {
-      if (player.id === id) {
-        self.opponentIndex = index;
-        Players[index].opponentIndex = self.index;
-        return true;
-      }
-
-      return false;
-    });
-  },
-};
-
-// ---------------------------------------------------------
-// Routine to broadcast the list of all players to everyone
-// ---------------------------------------------------------
-function BroadcastPlayersList() {
-  const playersList = [];
-  Players.forEach((player) => {
-    if (player.name !== '') {
-      playersList.push(player.getId());
-    }
-  });
-
-  const message = JSON.stringify({
-    action: 'players_list',
-    data: playersList,
-  });
-
-  Players.forEach((player) => {
-    player.connection.sendUTF(message);
-  });
-}
