@@ -7,6 +7,7 @@ const { JOIN, NEW_GAME, PLAY } = Action;
 console.log('correct !');
 
 const ws = new WebSocket('ws://localhost:8080');
+// const ws = new WebSocket('wss://draught-server.herokuapp.com/');
 const output = document.getElementById('output');
 const join = document.getElementById('join');
 const newGame = document.getElementById('new_game');

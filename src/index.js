@@ -1,13 +1,16 @@
 const ws = require('ws');
+const http = require('http');
 const Message = require('./Message');
 const Action = require('./Action');
 const Player = require('./Player');
 const Players = require('./Players');
 const Utils = require('./Utils');
 
+const server = http.createServer();
 const WebSocketServer = ws.Server;
 const PORT = 8080;
-const wss = new WebSocketServer({ port: PORT });
+const wss = new WebSocketServer({ server });
+server.listen(PORT);
 const players = new Players();
 console.log('start');
 
