@@ -13,7 +13,7 @@ class Player {
   }
 
   isReady() {
-    this.connection.readyState = 1;
+    return this.connection.readyState === 1;
   }
 
   sendMessage(message) {

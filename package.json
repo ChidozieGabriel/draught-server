@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "client": "serve -s ./client",
     "start": "node src"
   },
   "dependencies": {
