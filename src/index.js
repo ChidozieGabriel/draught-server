@@ -8,7 +8,7 @@ const Utils = require('./Utils');
 
 const server = http.createServer();
 const WebSocketServer = ws.Server;
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const wss = new WebSocketServer({ server });
 server.listen(PORT);
 const players = new Players();
