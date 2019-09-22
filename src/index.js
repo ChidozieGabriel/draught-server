@@ -1,16 +1,23 @@
 const ws = require('ws');
 const http = require('http');
+const express = require('express');
 const Message = require('./Message');
 const Action = require('./Action');
 const Player = require('./Player');
 const Players = require('./Players');
 const Utils = require('./Utils');
 
-const server = http.createServer();
+const app = express();
+app.all('*', (req, res) => {
+  res.json({ message: 'Welcome to my game server' });
+});
+const server = http.createServer(app);
 const WebSocketServer = ws.Server;
 const PORT = process.env.PORT || 8080;
 const wss = new WebSocketServer({ server });
-server.listen(PORT);
+server.listen(PORT, () => {
+  console.info(`Server started on PORT: ${PORT}`);
+});
 const players = new Players();
 console.log('start');
 
